@@ -40,6 +40,59 @@
             z-index: -1;
             pointer-events: none;
         }
+        .intro-overlay {
+            position: fixed;
+            z-index: 9999;
+            inset: 0;
+            background: rgba(188,160,90,0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s;
+        }
+        .intro-box {
+            background: linear-gradient(180deg, #fffbe8 0%, #f8f3e8 100%);
+            border: 4px solid #bca05a;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.14);
+            padding: 36px 28px;
+            max-width: 90vw;
+            width: 400px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .intro-title {
+            font-size: 1.25em;
+            color: #7b652d;
+            font-weight: bold;
+            margin-bottom: 18px;
+            letter-spacing: 1px;
+        }
+        .intro-desc {
+            font-size: 1.07em;
+            color: #8b7a3c;
+            margin-bottom: 26px;
+        }
+        .intro-btn {
+            background: linear-gradient(90deg, #bca05a 0%, #e7d7a1 100%);
+            color: #7b652d;
+            border: none;
+            border-radius: 22px;
+            padding: 12px 0;
+            font-size: 1.08em;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            box-shadow: 0 2px 8px rgba(188, 160, 90, 0.10);
+            letter-spacing: 1px;
+        }
+        .intro-btn:hover {
+            background: #e7d7a1;
+            color: #bca05a;
+        }
         .blank-container {
             max-width: 800px;
             margin: 48px auto;
@@ -196,6 +249,11 @@
             .split-group {
                 flex-direction: column;
                 gap: 0;
+            }
+            .intro-box {
+                padding: 16px 4vw;
+                width: 96vw;
+                min-width: unset;
             }
         }
     </style>
