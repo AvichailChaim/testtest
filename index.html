@@ -233,6 +233,49 @@
         .split-group .form-group {
             flex: 1 1 0;
         }
+        .payment-info {
+            background: #fffbe8;
+            border: 1px solid #e7d7a1;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 20px 0;
+            font-size: 0.9em;
+            color: #7b652d;
+        }
+        .total-calculation {
+            background: #f0f8ff;
+            border: 2px solid #bca05a;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 15px 0;
+            font-size: 1em;
+            color: #7b652d;
+            font-weight: bold;
+            text-align: center;
+            display: none;
+        }
+        .alert-message {
+            background: #ffe6e6;
+            color: #b00;
+            border: 1px solid #ffb3b3;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        .alert-message a {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 20px;
+            background: #b00;
+            color: white !important;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .alert-message a:hover {
+            background: #900;
+        }
         @media (max-width: 700px) {
             .blank-container {
                 max-width: 100%;
@@ -317,7 +360,7 @@
                 </div>
                 <div id="coordinatorFields" style="display:none;">
                     <div class="form-group">
-                        <label>האם יש תחתיך מפיצים? <span style="font-size:0.9em">(במידה שמדובר בטלפונים כשרים, תמלא בבקשה את הפרטים)</span></label>
+                        <label>האם יש תחתיך מפיצים? <span style="font-size:0.9em">(במידה שמדובר בטלפונים כשרים)</span></label>
                         <select name="hasDistributors" id="hasDistributors">
                             <option value="">בחר</option>
                             <option value="כן">כן</option>
@@ -325,7 +368,7 @@
                         </select>
                     </div>
                     <div class="form-group" id="distributorsPhonesGroup" style="display:none;">
-                        <label>תמלא בבקשה את השמות ומספרי טלפונים של הנציגים:</label>
+                        <label>מספרי טלפונים של נציגים:</label>
                         <textarea name="distributorsPhones"></textarea>
                     </div>
                     <div class="form-group">
@@ -338,7 +381,7 @@
                     </div>
                     <div class="form-group" id="coordinatorAmountGroup" style="display:none;">
                         <label>כמה אתה תורם בכל חודש? (₪)</label>
-                        <input type="number" name="coordinatorAmount" min="0">
+                        <input type="number" name="coordinatorAmount" id="coordinatorAmount" min="0">
                     </div>
                     <div class="form-group">
                         <label>האם הנציגים תורמים כל חודש?</label>
@@ -350,7 +393,7 @@
                     </div>
                     <div class="form-group" id="distributorsAmountGroup" style="display:none;">
                         <label>כמה הנציגים תורמים בכל חודש? (₪)</label>
-                        <input type="number" name="distributorsAmount" min="0">
+                        <input type="number" name="distributorsAmount" id="distributorsAmount" min="0">
                     </div>
                 </div>
                 <div class="split-group">
@@ -360,8 +403,15 @@
                     </div>
                     <div class="form-group">
                         <label>כמות שבועית (סה"כ מחולקת בעירך):</label>
-                        <input type="number" name="weeklyAmount" min="0">
+                        <input type="number" name="weeklyAmount" id="weeklyAmount" min="0" required>
                     </div>
+                </div>
+                <div class="form-group" id="monthlyPaymentGroup">
+                    <label>תשלום חודשי עבור הדפסה (ש"ח):</label>
+                    <input type="number" name="monthlyPayment" id="monthlyPayment" min="0" step="0.01" required>
+                </div>
+                <div id="totalCalculation" class="total-calculation">
+                    סכום כולל (רכז + נציגים): <span id="totalAmount">0</span> ש"ח
                 </div>
                 <div class="form-group">
                     <label>אני מגיע לאסוף את הכתבי קודש בכל שבוע:</label>
@@ -375,6 +425,14 @@
                     <label>מעוניין לעזור ב:</label>
                     <textarea name="helpWith"></textarea>
                 </div>
+                <div class="payment-info">
+                    <small>
+                        חלוקת כתבי הקודש של מורנו, מותנית (בעקבות ההוצאות המרובות) בהשתתפות בהדפסה.<br>
+                        העלות היא 0.44 אגורות לכל עלון.<br>
+                        לדוגמה: 50 עלונים * 0.44 * 4 שבועות (תשלום חודשי) = 88 ש"ח.
+                    </small>
+                </div>
+                <div id="paymentAlert" class="alert-message" style="display:none;"></div>
                 <button type="submit" class="submit-btn">שלח</button>
             </form>
             <div id="successMessage" class="success-message">
@@ -397,12 +455,58 @@
             const distributorsDonation = document.getElementById('distributorsDonation');
             const distributorsAmountGroup = document.getElementById('distributorsAmountGroup');
             const successMessage = document.getElementById('successMessage');
+            const paymentAlert = document.getElementById('paymentAlert');
+            const weeklyAmountInput = document.getElementById('weeklyAmount');
+            const monthlyPaymentInput = document.getElementById('monthlyPayment');
+            const monthlyPaymentGroup = document.getElementById('monthlyPaymentGroup');
+            const coordinatorAmountInput = document.getElementById('coordinatorAmount');
+            const distributorsAmountInput = document.getElementById('distributorsAmount');
+            const totalCalculationDiv = document.getElementById('totalCalculation');
+            const totalAmountSpan = document.getElementById('totalAmount');
+
+            // פונקציה לחישוב הסכום הכולל
+            function calculateTotalAmount() {
+                const coordinatorAmount = parseFloat(coordinatorAmountInput.value) || 0;
+                const distributorsAmount = parseFloat(distributorsAmountInput.value) || 0;
+                const coordinatorDonates = coordinatorDonation.value === 'כן';
+                const distributorsDonate = distributorsDonation.value === 'כן';
+                
+                let total = 0;
+                let hasAutoCalculation = false;
+                
+                if (coordinatorDonates && coordinatorAmount > 0) {
+                    total += coordinatorAmount;
+                    hasAutoCalculation = true;
+                }
+                
+                if (distributorsDonate && distributorsAmount > 0) {
+                    total += distributorsAmount;
+                    hasAutoCalculation = true;
+                }
+                
+                totalAmountSpan.textContent = total.toFixed(2);
+                
+                // הצגת החישוב והסתרת התשלום החודשי אם יש חישוב אוטומטי
+                if (hasAutoCalculation && total > 0) {
+                    totalCalculationDiv.style.display = 'block';
+                    monthlyPaymentGroup.style.display = 'none';
+                    monthlyPaymentInput.removeAttribute('required');
+                    monthlyPaymentInput.value = total.toFixed(2); // מעדכן את הערך לחישוב הבדיקה
+                } else {
+                    totalCalculationDiv.style.display = 'none';
+                    monthlyPaymentGroup.style.display = 'block';
+                    monthlyPaymentInput.setAttribute('required', 'required');
+                }
+            }
 
             roleRadios.forEach(radio => {
                 radio.addEventListener('change', function() {
                     const value = this.value;
                     coordinatorFields.style.display = (value === 'רכז' || value === 'שניהם') ? 'block' : 'none';
                     distributorFields.style.display = (value === 'מפיץ' || value === 'שניהם') ? 'block' : 'none';
+                    
+                    // איפוס החישוב כאשר משנים תפקיד
+                    calculateTotalAmount();
                 });
             });
 
@@ -415,20 +519,60 @@
             if (coordinatorDonation) {
                 coordinatorDonation.addEventListener('change', function() {
                     coordinatorAmountGroup.style.display = this.value === 'כן' ? 'block' : 'none';
+                    calculateTotalAmount();
                 });
             }
 
             if (distributorsDonation) {
                 distributorsDonation.addEventListener('change', function() {
                     distributorsAmountGroup.style.display = this.value === 'כן' ? 'block' : 'none';
+                    calculateTotalAmount();
                 });
+            }
+
+            // מאזינים לשינויים בשדות הסכומים
+            if (coordinatorAmountInput) {
+                coordinatorAmountInput.addEventListener('input', calculateTotalAmount);
+            }
+
+            if (distributorsAmountInput) {
+                distributorsAmountInput.addEventListener('input', calculateTotalAmount);
             }
 
             form.addEventListener('submit', async function(e) {
                 e.preventDefault();
+
+                // חישוב תשלום נדרש
+                const weeklyAmount = parseFloat(weeklyAmountInput.value) || 0;
+                const monthlyPayment = parseFloat(monthlyPaymentInput.value) || 0;
+                const requiredPayment = weeklyAmount * 0.44 * 4;
+
+                // בדיקת תקינות רק אם יש תשלום חודשי ידני
+                if (monthlyPaymentGroup.style.display !== 'none' && monthlyPayment < requiredPayment) {
+                    const missingAmount = requiredPayment - monthlyPayment;
+                    paymentAlert.style.display = 'block';
+                    paymentAlert.innerHTML = `
+                        לפי החישוב, נראה כי חסר לך עוד ${missingAmount.toFixed(2)}₪.
+                        <br>
+                        <a href="https://www.matara.pro/nedarimplus/online/?mosad=7000952&amount=${missingAmount.toFixed(2)}" 
+                           target="_blank">
+                            לחץ כאן להשלמת התשלום
+                        </a>
+                    `;
+                    paymentAlert.scrollIntoView({behavior: 'smooth'});
+                    return;
+                } else {
+                    paymentAlert.style.display = 'none';
+                }
+
+                // המשך שליחה
                 const formData = new FormData(form);
                 const data = Object.fromEntries(formData);
                 data.timestamp = new Date().toLocaleString('he-IL');
+                
+                // הוספת הסכום הכולל לנתונים
+                data.totalAmount = totalAmountSpan.textContent;
+                
                 try {
                     await fetch(GOOGLE_SCRIPT_URL, {
                         method: 'POST',
@@ -438,6 +582,9 @@
                     });
                     successMessage.style.display = 'block';
                     form.reset();
+                    totalCalculationDiv.style.display = 'none';
+                    monthlyPaymentGroup.style.display = 'block';
+                    monthlyPaymentInput.setAttribute('required', 'required');
                     successMessage.scrollIntoView({behavior: 'smooth'});
                 } catch (error) {
                     alert('אירעה שגיאה בשליחת הטופס. אנא נסה שוב.');
