@@ -1,436 +1,391 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html dir="rtl" lang="he">
 <head>
-  <meta charset="UTF-8">
-  <title>טופס נציגים ורכזים - הפצת כתבי הקודש של הינוקא הקדוש</title>
-  <meta property="og:title" content="טופס נציגים ורכזים - הפצת כתבי הקודש של הינוקא הקדוש">
-  <meta property="og:description" content="טופס מילוי עבור מפיצים ורכזים - המילוי הינו הכרחי">
-  <meta property="og:url" content="https://avichailchaim.github.io/testtest/">
-  <meta property="og:image" content="https://avichailchaim.github.io/testtest/image.jpg">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="טופס נציגים ורכזים - הפצת כתבי הקודש של הינוקא הקדוש">
-  <meta name="twitter:description" content="טופס מילוי עבור מפיצים ורכזים - המילוי הינו הכרחי">
-  <meta name="twitter:image" content="https://avichailchaim.github.io/testtest/image.jpg">
-</head>
-  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      background: #c1b08b;
-      margin: 0;
-      padding: 0;
-      font-family: 'Assistant', Arial, sans-serif;
-      direction: rtl;
-    }
-    .blank-container {
-      max-width: 800px;
-      margin: 48px auto;
-      background: linear-gradient(180deg, #f8f3e8 0%, #ede3c7 100%);
-      border: 8px solid #bca05a;
-      border-radius: 18px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.10);
-      min-height: 100vh;
-      box-sizing: border-box;
-      position: relative;
-    }
-    .blank-top-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: linear-gradient(90deg, #bca05a 0%, #e7d7a1 100%);
-      height: 68px;
-      border-top-left-radius: 10px;
-      border-top-right-radius: 10px;
-      border-bottom: 3px solid #e7d7a1;
-      padding: 0 32px;
-      box-sizing: border-box;
-    }
-    .bsd-label {
-      color: #7b652d;
-      font-size: 1.1em;
-      font-weight: bold;
-      margin: 0;
-      padding: 0;
-    }
-    .form-title {
-      text-align: center;
-      font-size: 1.3em;
-      color: #7b652d;
-      font-weight: bold;
-      letter-spacing: 1px;
-      margin: 0 auto;
-      flex: 1;
-    }
-    .form-content {
-      padding: 36px 32px 32px 32px;
-    }
-    /* --- עיצוב הודעת פתיחה --- */
-    .intro-overlay {
-      position: fixed;
-      z-index: 9999;
-      inset: 0;
-      background: rgba(188,160,90,0.95);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: opacity 0.3s;
-    }
-    .intro-box {
-      background: linear-gradient(180deg, #fffbe8 0%, #f8f3e8 100%);
-      border: 4px solid #bca05a;
-      border-radius: 18px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.14);
-      padding: 36px 28px;
-      max-width: 90vw;
-      width: 400px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .intro-title {
-      font-size: 1.25em;
-      color: #7b652d;
-      font-weight: bold;
-      margin-bottom: 18px;
-      letter-spacing: 1px;
-    }
-    .intro-desc {
-      font-size: 1.07em;
-      color: #8b7a3c;
-      margin-bottom: 26px;
-    }
-    .intro-btn {
-      background: linear-gradient(90deg, #bca05a 0%, #e7d7a1 100%);
-      color: #7b652d;
-      border: none;
-      border-radius: 22px;
-      padding: 12px 0;
-      font-size: 1.08em;
-      font-weight: bold;
-      width: 100%;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-      box-shadow: 0 2px 8px rgba(188, 160, 90, 0.10);
-      letter-spacing: 1px;
-    }
-    .intro-btn:hover {
-      background: #e7d7a1;
-      color: #bca05a;
-    }
-    @media (max-width: 600px) {
-      .intro-box {
-        padding: 16px 4vw;
-        width: 96vw;
-        min-width: unset;
-      }
-    }
-    /* --- המשך עיצוב הטופס כמו קודם --- */
-    .form-group { margin-bottom: 22px; }
-    label {
-      display: block;
-      margin-bottom: 7px;
-      color: #7b652d;
-      font-size: 1em;
-      font-weight: 600;
-    }
-    input[type="text"],
-    input[type="email"],
-    input[type="tel"],
-    input[type="number"],
-    textarea,
-    select {
-      width: 100%;
-      padding: 12px 10px;
-      border: 1.5px solid #e7d7a1;
-      border-radius: 8px;
-      font-size: 1em;
-      font-family: inherit;
-      background: #fcfaef;
-      transition: border-color 0.2s;
-      box-sizing: border-box;
-    }
-    input:focus,
-    textarea:focus,
-    select:focus {
-      outline: none;
-      border-color: #bca05a;
-      background: #fff;
-    }
-    textarea {
-      min-height: 80px;
-      resize: vertical;
-    }
-    .radio-group, .checkbox-group {
-      display: flex;
-      gap: 16px;
-      margin-top: 4px;
-      flex-wrap: wrap;
-    }
-    .radio-option, .checkbox-option {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      padding: 4px 14px;
-      border: 1.5px solid #e7d7a1;
-      border-radius: 18px;
-      background: #fcfaef;
-      cursor: pointer;
-      font-size: 1em;
-      transition: border-color 0.2s, background 0.2s;
-    }
-    .radio-option input[type="radio"],
-    .checkbox-option input[type="checkbox"] {
-      accent-color: #bca05a;
-      margin: 0 0 0 2px;
-    }
-    .submit-btn {
-      background: linear-gradient(90deg, #bca05a 0%, #e7d7a1 100%);
-      color: #7b652d;
-      border: none;
-      border-radius: 22px;
-      padding: 13px 0;
-      font-size: 1.1em;
-      font-weight: bold;
-      width: 100%;
-      margin-top: 12px;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-      box-shadow: 0 2px 8px rgba(188, 160, 90, 0.10);
-      letter-spacing: 1px;
-    }
-    .submit-btn:hover {
-      background: #e7d7a1;
-      color: #bca05a;
-    }
-    .success-message {
-      display: none;
-      background: #e7f6e7;
-      color: #2e6b2e;
-      padding: 18px;
-      border-radius: 10px;
-      border: 1.5px solid #bca05a;
-      margin-top: 18px;
-      text-align: center;
-      font-weight: bold;
-      font-size: 1.1em;
-    }
-    .split-group {
-      display: flex;
-      gap: 18px;
-    }
-    .split-group .form-group {
-      flex: 1 1 0;
-    }
-    @media (max-width: 700px) {
-      .blank-container {
-        max-width: 100%;
-        border-width: 4px;
-        border-radius: 10px;
-      }
-      .form-content {
-        padding: 18px 6vw 18px 6vw;
-      }
-      .blank-top-bar {
-        height: 48px;
-        padding: 0 12px;
-      }
-      .split-group {
-        flex-direction: column;
-        gap: 0;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta property="og:title" content="טופס נציגים ורכזים - הפצת כתבי הקודש של הינוקא הקדוש">
+    <meta property="og:description" content="טופס מילוי עבור מפיצים ורכזים - המילוי הינו הכרחי">
+    <meta property="og:url" content="https://avichailchaim.github.io/testtest/">
+    <meta property="og:image" content="https://avichailchaim.github.io/testtest/image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="טופס נציגים ורכזים - הפצת כתבי הקודש של הינוקא הקדוש">
+    <meta name="twitter:description" content="טופס מילוי עבור מפיצים ורכזים - המילוי הינו הכרחי">
+    <meta name="twitter:image" content="https://avichailchaim.github.io/testtest/image.jpg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>טופס נציגים ורכזים - הפצת כתבי הקודש של הינוקא הקדוש</title>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #c1b08b;
+            margin: 0;
+            padding: 0;
+            font-family: 'Assistant', Arial, sans-serif;
+            direction: rtl;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://avichailchaim.github.io/testtest/background.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.15;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .blank-container {
+            max-width: 800px;
+            margin: 48px auto;
+            background: linear-gradient(180deg, #f8f3e8 0%, #ede3c7 100%);
+            border: 8px solid #bca05a;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+            min-height: 100vh;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 1;
+        }
+        .blank-top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(90deg, #bca05a 0%, #e7d7a1 100%);
+            height: 68px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            border-bottom: 3px solid #e7d7a1;
+            padding: 0 32px;
+            box-sizing: border-box;
+        }
+        .bsd-label {
+            color: #7b652d;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin: 0;
+            padding: 0;
+        }
+        .form-title {
+            text-align: center;
+            font-size: 1.3em;
+            color: #7b652d;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin: 0 auto;
+            flex: 1;
+        }
+        .form-content {
+            padding: 36px 32px 32px 32px;
+        }
+        .form-group {
+            margin-bottom: 22px;
+        }
+        label {
+            display: block;
+            margin-bottom: 7px;
+            color: #7b652d;
+            font-size: 1em;
+            font-weight: 600;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px 10px;
+            border: 1.5px solid #e7d7a1;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+            background: #fcfaef;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #bca05a;
+            background: #fff;
+        }
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        .radio-group {
+            display: flex;
+            gap: 16px;
+            margin-top: 4px;
+            flex-wrap: wrap;
+        }
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 14px;
+            border: 1.5px solid #e7d7a1;
+            border-radius: 18px;
+            background: #fcfaef;
+            cursor: pointer;
+            font-size: 1em;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .radio-option input[type="radio"] {
+            accent-color: #bca05a;
+            margin: 0 0 0 2px;
+        }
+        .submit-btn {
+            background: linear-gradient(90deg, #bca05a 0%, #e7d7a1 100%);
+            color: #7b652d;
+            border: none;
+            border-radius: 22px;
+            padding: 13px 0;
+            font-size: 1.1em;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 12px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            box-shadow: 0 2px 8px rgba(188, 160, 90, 0.10);
+            letter-spacing: 1px;
+        }
+        .submit-btn:hover {
+            background: #e7d7a1;
+            color: #bca05a;
+        }
+        .success-message {
+            display: none;
+            background: #e7f6e7;
+            color: #2e6b2e;
+            padding: 18px;
+            border-radius: 10px;
+            border: 1.5px solid #bca05a;
+            margin-top: 18px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        .split-group {
+            display: flex;
+            gap: 18px;
+        }
+        .split-group .form-group {
+            flex: 1 1 0;
+        }
+        @media (max-width: 700px) {
+            .blank-container {
+                max-width: 100%;
+                border-width: 4px;
+                border-radius: 10px;
+            }
+            .form-content {
+                padding: 18px 6vw 18px 6vw;
+            }
+            .blank-top-bar {
+                height: 48px;
+                padding: 0 12px;
+            }
+            .split-group {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
 </head>
 <body>
-  <!-- הודעת פתיחה -->
-  <div class="intro-overlay" id="introOverlay">
-    <div class="intro-box">
-      <div class="intro-title">טופס מילוי עבור מפיצים ורכזים</div>
-      <div class="intro-desc">המילוי הינו הכרחי</div>
-      <button class="intro-btn" onclick="document.getElementById('introOverlay').style.display='none'">הבנתי, המשך לטופס</button>
+    <div class="intro-overlay" id="introOverlay">
+        <div class="intro-box">
+            <div class="intro-title">טופס מילוי עבור מפיצים ורכזים</div>
+            <div class="intro-desc">המילוי הינו הכרחי</div>
+            <button class="intro-btn" onclick="document.getElementById('introOverlay').style.display='none'">הבנתי, המשך לטופס</button>
+        </div>
     </div>
-  </div>
-  <div class="blank-container">
-    <div class="blank-top-bar">
-      <div class="bsd-label">בס"ד</div>
-      <div class="form-title">טופס נציגים ורכזים - הפצת כתבי הקודש של הינוקא הקדוש</div>
-      <div style="width:60px"></div>
-    </div>
-    <div class="form-content">
-      <form id="volunteerForm">
-        <div class="form-group">
-            <label>שם מלא:</label>
-            <input type="text" name="fullName" required>
+    <div class="blank-container">
+        <div class="blank-top-bar">
+            <div class="bsd-label">בס"ד</div>
+            <div class="form-title">טופס נציגים ורכזים - הפצת כתבי הקודש של הינוקא הקדוש</div>
+            <div style="width:60px"></div>
         </div>
-        <div class="form-group">
-            <label>מספר פלאפון:</label>
-            <input type="tel" name="phone" required>
-        </div>
-        <div class="form-group">
-            <label>כתובת מייל:</label>
-            <input type="email" name="email">
-        </div>
-        <div class="form-group">
-            <label>מעוניין להמשיך להיות:</label>
-            <div class="radio-group">
-                <div class="radio-option">
-                    <input type="radio" id="distributor" name="role" value="מפיץ">
-                    <label for="distributor">מפיץ</label>
-                </div>
-                <div class="radio-option">
-                    <input type="radio" id="coordinator" name="role" value="רכז">
-                    <label for="coordinator">רכז</label>
-                </div>
-                <div class="radio-option">
-                    <input type="radio" id="both" name="role" value="שניהם">
-                    <label for="both">שניהם</label>
-                </div>
-            </div>
-        </div>
-        <div id="distributorFields" style="display:none;">
-            <div class="split-group">
+        <div class="form-content">
+            <form id="volunteerForm">
                 <div class="form-group">
-                    <label>שם הרכז:</label>
-                    <input type="text" name="coordinatorName">
+                    <label>שם מלא:</label>
+                    <input type="text" name="fullName" required>
                 </div>
                 <div class="form-group">
-                    <label>טלפון הרכז:</label>
-                    <input type="tel" name="coordinatorPhone">
+                    <label>מספר פלאפון:</label>
+                    <input type="tel" name="phone" required>
                 </div>
+                <div class="form-group">
+                    <label>כתובת מייל:</label>
+                    <input type="email" name="email">
+                </div>
+                <div class="form-group">
+                    <label>מעוניין להמשיך להיות:</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="distributor" name="role" value="מפיץ">
+                            <label for="distributor">מפיץ</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="coordinator" name="role" value="רכז">
+                            <label for="coordinator">רכז</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="both" name="role" value="שניהם">
+                            <label for="both">שניהם</label>
+                        </div>
+                    </div>
+                </div>
+                <div id="distributorFields" style="display:none;">
+                    <div class="split-group">
+                        <div class="form-group">
+                            <label>שם הרכז:</label>
+                            <input type="text" name="coordinatorName">
+                        </div>
+                        <div class="form-group">
+                            <label>טלפון הרכז:</label>
+                            <input type="tel" name="coordinatorPhone">
+                        </div>
+                    </div>
+                </div>
+                <div id="coordinatorFields" style="display:none;">
+                    <div class="form-group">
+                        <label>האם יש תחתיך מפיצים? <span style="font-size:0.9em">(במידה שמדובר בטלפונים כשרים)</span></label>
+                        <select name="hasDistributors" id="hasDistributors">
+                            <option value="">בחר</option>
+                            <option value="כן">כן</option>
+                            <option value="לא">לא</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="distributorsPhonesGroup" style="display:none;">
+                        <label>מספרי טלפונים של נציגים:</label>
+                        <textarea name="distributorsPhones"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>האם אתה תורם כל חודש?</label>
+                        <select name="coordinatorDonation" id="coordinatorDonation">
+                            <option value="">בחר</option>
+                            <option value="כן">כן</option>
+                            <option value="לא">לא</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="coordinatorAmountGroup" style="display:none;">
+                        <label>כמה אתה תורם בכל חודש? (₪)</label>
+                        <input type="number" name="coordinatorAmount" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>האם הנציגים תורמים כל חודש?</label>
+                        <select name="distributorsDonation" id="distributorsDonation">
+                            <option value="">בחר</option>
+                            <option value="כן">כן</option>
+                            <option value="לא">לא</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="distributorsAmountGroup" style="display:none;">
+                        <label>כמה הנציגים תורמים בכל חודש? (₪)</label>
+                        <input type="number" name="distributorsAmount" min="0">
+                    </div>
+                </div>
+                <div class="split-group">
+                    <div class="form-group">
+                        <label>עיר:</label>
+                        <input type="text" name="city">
+                    </div>
+                    <div class="form-group">
+                        <label>כמות שבועית (סה"כ מחולקת בעירך):</label>
+                        <input type="number" name="weeklyAmount" min="0">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>אני מגיע לאסוף את הכתבי קודש בכל שבוע:</label>
+                    <select name="weeklyPickup">
+                        <option value="">בחר</option>
+                        <option value="כן">כן</option>
+                        <option value="לא">לא</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>מעוניין לעזור ב:</label>
+                    <textarea name="helpWith"></textarea>
+                </div>
+                <button type="submit" class="submit-btn">שלח</button>
+            </form>
+            <div id="successMessage" class="success-message">
+                הטופס נשלח בהצלחה! תודה רבה על השתתפותך בפעילות הקדושה.
             </div>
         </div>
-        <div id="coordinatorFields" style="display:none;">
-            <div class="form-group">
-                <label>האם יש תחתיך מפיצים? <span style="font-size:0.9em">(במידה שמדובר בטלפונים כשרים)</span></label>
-                <select name="hasDistributors" id="hasDistributors">
-                    <option value="">בחר</option>
-                    <option value="כן">כן</option>
-                    <option value="לא">לא</option>
-                </select>
-            </div>
-            <div class="form-group" id="distributorsPhonesGroup" style="display:none;">
-                <label>מספרי טלפונים של נציגים:</label>
-                <textarea name="distributorsPhones"></textarea>
-            </div>
-            <div class="form-group">
-                <label>האם אתה תורם כל חודש?</label>
-                <select name="coordinatorDonation" id="coordinatorDonation">
-                    <option value="">בחר</option>
-                    <option value="כן">כן</option>
-                    <option value="לא">לא</option>
-                </select>
-            </div>
-            <div class="form-group" id="coordinatorAmountGroup" style="display:none;">
-                <label>כמה אתה תורם בכל חודש? (₪)</label>
-                <input type="number" name="coordinatorAmount" min="0">
-            </div>
-            <div class="form-group">
-                <label>האם הנציגים תורמים כל חודש?</label>
-                <select name="distributorsDonation" id="distributorsDonation">
-                    <option value="">בחר</option>
-                    <option value="כן">כן</option>
-                    <option value="לא">לא</option>
-                </select>
-            </div>
-            <div class="form-group" id="distributorsAmountGroup" style="display:none;">
-                <label>כמה הנציגים תורמים בכל חודש? (₪)</label>
-                <input type="number" name="distributorsAmount" min="0">
-            </div>
-        </div>
-        <div class="split-group">
-            <div class="form-group">
-                <label>עיר:</label>
-                <input type="text" name="city">
-            </div>
-            <div class="form-group">
-                <label>כמות שבועית (סה"כ מחולקת בעירך):</label>
-                <input type="number" name="weeklyAmount" min="0">
-            </div>
-        </div>
-        <div class="form-group">
-            <label>אני מגיע לאסוף את הכתבי קודש בכל שבוע:</label>
-            <select name="weeklyPickup">
-                <option value="">בחר</option>
-                <option value="כן">כן</option>
-                <option value="לא">לא</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>מעוניין לעזור ב:</label>
-            <textarea name="helpWith"></textarea>
-        </div>
-        <button type="submit" class="submit-btn">שלח</button>
-      </form>
-      <div id="successMessage" class="success-message">
-        הטופס נשלח בהצלחה! תודה רבה על השתתפותך בפעילות הקדושה.
-      </div>
     </div>
-  </div>
-  <script>
-      const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxSojFFKfsC4XdrsZ5H5L8iPFedV8F9GBasMC1MfWy8AjY9y1fbAPxnZnowPa2VJODtYQ/exec';
+    <script>
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxSojFFKfsC4XdrsZ5H5L8iPFedV8F9GBasMC1MfWy8AjY9y1fbAPxnZnowPa2VJODtYQ/exec';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('volunteerForm');
+            const roleRadios = document.querySelectorAll('input[name="role"]');
+            const coordinatorFields = document.getElementById('coordinatorFields');
+            const distributorFields = document.getElementById('distributorFields');
+            const hasDistributors = document.getElementById('hasDistributors');
+            const distributorsPhonesGroup = document.getElementById('distributorsPhonesGroup');
+            const coordinatorDonation = document.getElementById('coordinatorDonation');
+            const coordinatorAmountGroup = document.getElementById('coordinatorAmountGroup');
+            const distributorsDonation = document.getElementById('distributorsDonation');
+            const distributorsAmountGroup = document.getElementById('distributorsAmountGroup');
+            const successMessage = document.getElementById('successMessage');
 
-      document.addEventListener('DOMContentLoaded', function() {
-          const form = document.getElementById('volunteerForm');
-          const roleRadios = document.querySelectorAll('input[name="role"]');
-          const coordinatorFields = document.getElementById('coordinatorFields');
-          const distributorFields = document.getElementById('distributorFields');
-          const hasDistributors = document.getElementById('hasDistributors');
-          const distributorsPhonesGroup = document.getElementById('distributorsPhonesGroup');
-          const coordinatorDonation = document.getElementById('coordinatorDonation');
-          const coordinatorAmountGroup = document.getElementById('coordinatorAmountGroup');
-          const distributorsDonation = document.getElementById('distributorsDonation');
-          const distributorsAmountGroup = document.getElementById('distributorsAmountGroup');
-          const successMessage = document.getElementById('successMessage');
+            roleRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const value = this.value;
+                    coordinatorFields.style.display = (value === 'רכז' || value === 'שניהם') ? 'block' : 'none';
+                    distributorFields.style.display = (value === 'מפיץ' || value === 'שניהם') ? 'block' : 'none';
+                });
+            });
 
-          roleRadios.forEach(radio => {
-              radio.addEventListener('change', function() {
-                  const value = this.value;
-                  coordinatorFields.style.display = (value === 'רכז' || value === 'שניהם') ? 'block' : 'none';
-                  distributorFields.style.display = (value === 'מפיץ' || value === 'שניהם') ? 'block' : 'none';
-              });
-          });
+            if (hasDistributors) {
+                hasDistributors.addEventListener('change', function() {
+                    distributorsPhonesGroup.style.display = this.value === 'כן' ? 'block' : 'none';
+                });
+            }
 
-          if (hasDistributors) {
-              hasDistributors.addEventListener('change', function() {
-                  distributorsPhonesGroup.style.display = this.value === 'כן' ? 'block' : 'none';
-              });
-          }
+            if (coordinatorDonation) {
+                coordinatorDonation.addEventListener('change', function() {
+                    coordinatorAmountGroup.style.display = this.value === 'כן' ? 'block' : 'none';
+                });
+            }
 
-          if (coordinatorDonation) {
-              coordinatorDonation.addEventListener('change', function() {
-                  coordinatorAmountGroup.style.display = this.value === 'כן' ? 'block' : 'none';
-              });
-          }
+            if (distributorsDonation) {
+                distributorsDonation.addEventListener('change', function() {
+                    distributorsAmountGroup.style.display = this.value === 'כן' ? 'block' : 'none';
+                });
+            }
 
-          if (distributorsDonation) {
-              distributorsDonation.addEventListener('change', function() {
-                  distributorsAmountGroup.style.display = this.value === 'כן' ? 'block' : 'none';
-              });
-          }
-
-          form.addEventListener('submit', async function(e) {
-              e.preventDefault();
-              const formData = new FormData(form);
-              const data = Object.fromEntries(formData);
-              data.timestamp = new Date().toLocaleString('he-IL');
-              try {
-                  await fetch(GOOGLE_SCRIPT_URL, {
-                      method: 'POST',
-                      mode: 'no-cors',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify(data)
-                  });
-                  successMessage.style.display = 'block';
-                  form.reset();
-                  successMessage.scrollIntoView({behavior: 'smooth'});
-              } catch (error) {
-                  alert('אירעה שגיאה בשליחת הטופס. אנא נסה שוב.');
-              }
-          });
-      });
-  </script>
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData);
+                data.timestamp = new Date().toLocaleString('he-IL');
+                try {
+                    await fetch(GOOGLE_SCRIPT_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                    successMessage.style.display = 'block';
+                    form.reset();
+                    successMessage.scrollIntoView({behavior: 'smooth'});
+                } catch (error) {
+                    alert('אירעה שגיאה בשליחת הטופס. אנא נסה שוב.');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
