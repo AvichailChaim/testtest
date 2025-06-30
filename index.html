@@ -553,27 +553,16 @@
                 const requiredPayment = weeklyAmount * 0.44 * 4;
                 const totalAmount = parseFloat(totalAmountSpan.textContent) || 0;
 
-                // איסוף ידני של כל השדות
-                const data = {
-                    fullName: form.querySelector('[name="fullName"]').value || '',
-                    phone: form.querySelector('[name="phone"]').value || '',
-                    email: form.querySelector('[name="email"]').value || '',
-                    role: form.querySelector('[name="role"]:checked') ? form.querySelector('[name="role"]:checked').value : '',
-                    coordinatorName: form.querySelector('#coordinatorName') ? form.querySelector('#coordinatorName').value : '',
-                    coordinatorPhone: form.querySelector('#coordinatorPhone') ? form.querySelector('#coordinatorPhone').value : '',
-                    hasDistributors: form.querySelector('#hasDistributors') ? form.querySelector('#hasDistributors').value : '',
-                    distributorsPhones: form.querySelector('#distributorsPhones') ? form.querySelector('#distributorsPhones').value : '',
-                    coordinatorDonation: form.querySelector('#coordinatorDonation') ? form.querySelector('#coordinatorDonation').value : '',
-                    coordinatorAmount: form.querySelector('#coordinatorAmount') ? form.querySelector('#coordinatorAmount').value : '',
-                    distributorsDonation: form.querySelector('#distributorsDonation') ? form.querySelector('#distributorsDonation').value : '',
-                    distributorsAmount: form.querySelector('#distributorsAmount') ? form.querySelector('#distributorsAmount').value : '',
-                    city: form.querySelector('[name="city"]').value || '',
-                    weeklyAmount: form.querySelector('[name="weeklyAmount"]').value || '',
-                    weeklyPickup: form.querySelector('[name="weeklyPickup"]').value || '',
-                    helpWith: form.querySelector('[name="helpWith"]').value || '',
-                    monthlyPayment: form.querySelector('[name="monthlyPayment"]').value || '',
-                    totalAmount: totalAmountSpan.textContent || ''
-                };
+                // איסוף כל השדות מהטופס באופן דינמי
+                const formData = new FormData(form);
+                const data = {};
+                for (let [key, value] of formData.entries()) {
+                    data[key] = value;
+                }
+
+                // הוספת ערכים נוספים שלא נכללים ב-FormData (כמו totalAmount)
+                data.totalAmount = totalAmountSpan.textContent || '';
+                data.timestamp = new Date().toLocaleString('he-IL');
 
                 if (monthlyPaymentGroup.style.display !== 'none') {
                     if (monthlyPayment < requiredPayment) {
@@ -608,7 +597,6 @@
                 }
 
                 try {
-                    data.timestamp = new Date().toLocaleString('he-IL');
                     await fetch(GOOGLE_SCRIPT_URL, {
                         method: 'POST',
                         mode: 'no-cors',
