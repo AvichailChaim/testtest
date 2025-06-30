@@ -596,10 +596,11 @@
                     data.totalAmount = totalAmountSpan.textContent;
 
                     // כאן מוסיפים:
-                    if (data.role === "מפיץ") {
-                        data.coordinatorAmount = monthlyPaymentInput.value || '';
+                    if (!data.coordinatorAmount || data.coordinatorAmount === "") {
+                    // גם אם זה "רכז" או "מפיץ" - במידה ולא מולא שדה, לקחת מהשדה של התשלום החודשי
+                    data.coordinatorAmount = monthlyPaymentInput.value || '';
                     }
-
+                    
                     await fetch(GOOGLE_SCRIPT_URL, {
                         method: 'POST',
                         mode: 'no-cors',
