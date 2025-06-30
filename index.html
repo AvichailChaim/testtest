@@ -471,6 +471,8 @@
             const weeklyAmountInput = document.getElementById('weeklyAmount');
             const monthlyPaymentInput = document.getElementById('monthlyPayment');
             const monthlyPaymentGroup = document.getElementById('monthlyPaymentGroup');
+            const coordinatorNameInput = document.getElementById('coordinatorName');
+            const coordinatorPhoneInput = document.getElementById('coordinatorPhone');
             const coordinatorAmountInput = document.getElementById('coordinatorAmount');
             const distributorsAmountInput = document.getElementById('distributorsAmount');
             const totalCalculationDiv = document.getElementById('totalCalculation');
@@ -553,16 +555,28 @@
                 const requiredPayment = weeklyAmount * 0.44 * 4;
                 const totalAmount = parseFloat(totalAmountSpan.textContent) || 0;
 
-                // איסוף כל השדות מהטופס באופן דינמי
-                const formData = new FormData(form);
-                const data = {};
-                for (let [key, value] of formData.entries()) {
-                    data[key] = value;
-                }
-
-                // הוספת ערכים נוספים שלא נכללים ב-FormData (כמו totalAmount)
-                data.totalAmount = totalAmountSpan.textContent || '';
-                data.timestamp = new Date().toLocaleString('he-IL');
+                // איסוף ידני של כל השדות, כולל אלה המוסתרים
+                const data = {
+                    fullName: form.querySelector('[name="fullName"]').value || '',
+                    phone: form.querySelector('[name="phone"]').value || '',
+                    email: form.querySelector('[name="email"]').value || '',
+                    role: form.querySelector('[name="role"]:checked') ? form.querySelector('[name="role"]:checked').value : '',
+                    coordinatorName: coordinatorNameInput ? coordinatorNameInput.value || '' : '',
+                    coordinatorPhone: coordinatorPhoneInput ? coordinatorPhoneInput.value || '' : '',
+                    hasDistributors: hasDistributors ? hasDistributors.value || '' : '',
+                    distributorsPhones: form.querySelector('[name="distributorsPhones"]') ? form.querySelector('[name="distributorsPhones"]').value || '' : '',
+                    coordinatorDonation: coordinatorDonation ? coordinatorDonation.value || '' : '',
+                    coordinatorAmount: coordinatorAmountInput ? coordinatorAmountInput.value || '' : '',
+                    distributorsDonation: distributorsDonation ? distributorsDonation.value || '' : '',
+                    distributorsAmount: distributorsAmountInput ? distributorsAmountInput.value || '' : '',
+                    city: form.querySelector('[name="city"]').value || '',
+                    weeklyAmount: form.querySelector('[name="weeklyAmount"]').value || '',
+                    monthlyPayment: form.querySelector('[name="monthlyPayment"]').value || '',
+                    weeklyPickup: form.querySelector('[name="weeklyPickup"]').value || '',
+                    helpWith: form.querySelector('[name="helpWith"]').value || '',
+                    totalAmount: totalAmountSpan.textContent || '',
+                    timestamp: new Date().toLocaleString('he-IL')
+                };
 
                 if (monthlyPaymentGroup.style.display !== 'none') {
                     if (monthlyPayment < requiredPayment) {
