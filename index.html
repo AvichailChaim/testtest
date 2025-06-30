@@ -587,8 +587,14 @@
                 try {
                     const formData = new FormData(form);
                     const data = Object.fromEntries(formData);
+
+                    // תיקון: במידה והשדה מוסתר (כלומר במצב של רכז/שניהם) — FormData לא שולף את הערך!
+                    // לכן נוסיף ידנית את הערך מה־input (כי הוא עדיין קיים בדום).
+                    data.monthlyPayment = monthlyPaymentInput.value || '';
+
                     data.timestamp = new Date().toLocaleString('he-IL');
                     data.totalAmount = totalAmountSpan.textContent;
+
 
                     await fetch(GOOGLE_SCRIPT_URL, {
                         method: 'POST',
