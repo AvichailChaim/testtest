@@ -17,7 +17,7 @@
     <title>טופס נציגים ורכזים - הפצת כתבי הקודש של הינוקא הקדוש</title>
     <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* הסגנונות נשארים כפי שהם */
+        /* --- עיצוב כפי שהיה --- */
         body {
             background: #c1b08b;
             margin: 0;
@@ -470,7 +470,6 @@
             const paymentAlert = document.getElementById('paymentAlert');
             const weeklyAmountInput = document.getElementById('weeklyAmount');
             const monthlyPaymentInput = document.getElementById('monthlyPayment');
-            const monthlyPaymentGroup = document.getElementById('monthlyPaymentGroup');
             const coordinatorNameInput = document.getElementById('coordinatorName');
             const coordinatorPhoneInput = document.getElementById('coordinatorPhone');
             const coordinatorAmountInput = document.getElementById('coordinatorAmount');
@@ -483,31 +482,21 @@
                 const distributorsAmount = parseFloat(distributorsAmountInput.value) || 0;
                 const coordinatorDonates = coordinatorDonation.value === 'כן';
                 const distributorsDonate = distributorsDonation.value === 'כן';
-                
+
                 let total = 0;
-                let hasAutoCalculation = false;
-                
                 if (coordinatorDonates && coordinatorAmount > 0) {
                     total += coordinatorAmount;
-                    hasAutoCalculation = true;
                 }
-                
                 if (distributorsDonate && distributorsAmount > 0) {
                     total += distributorsAmount;
-                    hasAutoCalculation = true;
                 }
-                
                 totalAmountSpan.textContent = total.toFixed(2);
-                
-                if (hasAutoCalculation && total > 0) {
+
+                // שדה התשלום תמיד גלוי ולא משנים אותו!
+                if (coordinatorDonates || distributorsDonate) {
                     totalCalculationDiv.style.display = 'block';
-                    monthlyPaymentGroup.style.display = 'none';
-                    monthlyPaymentInput.removeAttribute('required');
-                    monthlyPaymentInput.value = total.toFixed(2);
                 } else {
                     totalCalculationDiv.style.display = 'none';
-                    monthlyPaymentGroup.style.display = 'block';
-                    monthlyPaymentInput.setAttribute('required', 'required');
                 }
             }
 
@@ -555,7 +544,7 @@
                 const requiredPayment = weeklyAmount * 0.44 * 4;
                 const totalAmount = parseFloat(totalAmountSpan.textContent) || 0;
 
-                // איסוף ידני של כל השדות, כולל אלה המוסתרים
+                // איסוף כל השדות כולל התשלום
                 const data = {
                     fullName: form.querySelector('[name="fullName"]').value || '',
                     phone: form.querySelector('[name="phone"]').value || '',
@@ -571,43 +560,27 @@
                     distributorsAmount: distributorsAmountInput ? distributorsAmountInput.value || '' : '',
                     city: form.querySelector('[name="city"]').value || '',
                     weeklyAmount: form.querySelector('[name="weeklyAmount"]').value || '',
-                    monthlyPayment: form.querySelector('[name="monthlyPayment"]').value || '',
+                    monthlyPayment: form.querySelector('[name="monthlyPayment"]').value || '', // תמיד יישלח!
                     weeklyPickup: form.querySelector('[name="weeklyPickup"]').value || '',
                     helpWith: form.querySelector('[name="helpWith"]').value || '',
                     totalAmount: totalAmountSpan.textContent || '',
                     timestamp: new Date().toLocaleString('he-IL')
                 };
 
-                if (monthlyPaymentGroup.style.display !== 'none') {
-                    if (monthlyPayment < requiredPayment) {
-                        const missingAmount = requiredPayment - monthlyPayment;
-                        paymentAlert.style.display = 'block';
-                        paymentAlert.innerHTML = `
-                            לפי החישוב, נראה כי חסר לך עוד ${missingAmount.toFixed(2)}₪.
-                            <br>
-                            <a href="https://www.matara.pro/nedarimplus/online/?mosad=7000952&amount=${missingAmount.toFixed(2)}" 
-                               target="_blank">
-                                לחץ כאן להשלמת התשלום
-                            </a>
-                        `;
-                        paymentAlert.scrollIntoView({behavior: 'smooth'});
-                        return;
-                    }
-                } else {
-                    if (totalAmount < requiredPayment) {
-                        const missingAmount = requiredPayment - totalAmount;
-                        paymentAlert.style.display = 'block';
-                        paymentAlert.innerHTML = `
-                            לפי החישוב, נראה כי חסר לך עוד ${missingAmount.toFixed(2)}₪.
-                            <br>
-                            <a href="https://www.matara.pro/nedarimplus/online/?mosad=7000952&amount=${missingAmount.toFixed(2)}" 
-                               target="_blank">
-                                לחץ כאן להשלמת התשלום
-                            </a>
-                        `;
-                        paymentAlert.scrollIntoView({behavior: 'smooth'});
-                        return;
-                    }
+                // בדיקות תשלום (אם תרצה)
+                if (monthlyPayment < requiredPayment) {
+                    const missingAmount = requiredPayment - monthlyPayment;
+                    paymentAlert.style.display = 'block';
+                    paymentAlert.innerHTML = `
+                        לפי החישוב, נראה כי חסר לך עוד ${missingAmount.toFixed(2)}₪.
+                        <br>
+                        <a href="https://www.matara.pro/nedarimplus/online/?mosad=7000952&amount=${missingAmount.toFixed(2)}" 
+                           target="_blank">
+                            לחץ כאן להשלמת התשלום
+                        </a>
+                    `;
+                    paymentAlert.scrollIntoView({behavior: 'smooth'});
+                    return;
                 }
 
                 try {
@@ -620,8 +593,6 @@
                     successMessage.style.display = 'block';
                     form.reset();
                     totalCalculationDiv.style.display = 'none';
-                    monthlyPaymentGroup.style.display = 'block';
-                    monthlyPaymentInput.setAttribute('required', 'required');
                     successMessage.scrollIntoView({behavior: 'smooth'});
                 } catch (error) {
                     alert('אירעה שגיאה בשליחת הטופס. אנא נסה שוב.');
