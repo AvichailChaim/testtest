@@ -615,8 +615,12 @@
                 }
 
                 try {
+                    // עדכון ידני של השדות הנסתרים לפני השליחה
                     const formData = new FormData(form);
-                    const data = Object.fromEntries(formData);
+                    const data = {};
+                    formData.forEach((value, key) => {
+                        data[key] = value;
+                    });
                     data.timestamp = new Date().toLocaleString('he-IL');
                     data.totalAmount = totalAmountSpan.textContent;
 
