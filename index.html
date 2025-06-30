@@ -132,6 +132,7 @@
             letter-spacing: 1px;
             margin: 0 auto;
             flex: 1;
+            word-break: break-word;
         }
         .form-content {
             padding: 36px 32px 32px 32px;
@@ -287,7 +288,12 @@
             }
             .blank-top-bar {
                 height: 48px;
-                padding: 0 12px;
+                padding: 0 8px;
+            }
+            .form-title {
+                font-size: 1em;
+                line-height: 1.1;
+                word-break: break-word;
             }
             .split-group {
                 flex-direction: column;
@@ -297,6 +303,11 @@
                 padding: 16px 4vw;
                 width: 96vw;
                 min-width: unset;
+            }
+        }
+        @media (max-width: 400px) {
+            .form-title {
+                font-size: 0.93em;
             }
         }
     </style>
@@ -327,7 +338,7 @@
                 </div>
                 <div class="form-group">
                     <label>כתובת מייל:</label>
-                    <input type="email" name="email">
+                    <input type="email" name="email" required>
                 </div>
                 <div class="form-group">
                     <label>מעוניין להמשיך להיות:</label>
@@ -464,7 +475,6 @@
             const totalCalculationDiv = document.getElementById('totalCalculation');
             const totalAmountSpan = document.getElementById('totalAmount');
 
-            // פונקציה לחישוב הסכום הכולל
             function calculateTotalAmount() {
                 const coordinatorAmount = parseFloat(coordinatorAmountInput.value) || 0;
                 const distributorsAmount = parseFloat(distributorsAmountInput.value) || 0;
@@ -486,12 +496,11 @@
                 
                 totalAmountSpan.textContent = total.toFixed(2);
                 
-                // הצגת החישוב והסתרת התשלום החודשי אם יש חישוב אוטומטי
                 if (hasAutoCalculation && total > 0) {
                     totalCalculationDiv.style.display = 'block';
                     monthlyPaymentGroup.style.display = 'none';
                     monthlyPaymentInput.removeAttribute('required');
-                    monthlyPaymentInput.value = total.toFixed(2); // מעדכן את הערך לחישוב הבדיקה
+                    monthlyPaymentInput.value = total.toFixed(2);
                 } else {
                     totalCalculationDiv.style.display = 'none';
                     monthlyPaymentGroup.style.display = 'block';
@@ -504,8 +513,6 @@
                     const value = this.value;
                     coordinatorFields.style.display = (value === 'רכז' || value === 'שניהם') ? 'block' : 'none';
                     distributorFields.style.display = (value === 'מפיץ' || value === 'שניהם') ? 'block' : 'none';
-                    
-                    // איפוס החישוב כאשר משנים תפקיד
                     calculateTotalAmount();
                 });
             });
@@ -530,7 +537,6 @@
                 });
             }
 
-            // מאזינים לשינויים בשדות הסכומים
             if (coordinatorAmountInput) {
                 coordinatorAmountInput.addEventListener('input', calculateTotalAmount);
             }
@@ -541,39 +547,49 @@
 
             form.addEventListener('submit', async function(e) {
                 e.preventDefault();
-
-                // חישוב תשלום נדרש
                 const weeklyAmount = parseFloat(weeklyAmountInput.value) || 0;
                 const monthlyPayment = parseFloat(monthlyPaymentInput.value) || 0;
                 const requiredPayment = weeklyAmount * 0.44 * 4;
+                const totalAmount = parseFloat(totalAmountSpan.textContent) || 0;
 
-                // בדיקת תקינות רק אם יש תשלום חודשי ידני
-                if (monthlyPaymentGroup.style.display !== 'none' && monthlyPayment < requiredPayment) {
-                    const missingAmount = requiredPayment - monthlyPayment;
-                    paymentAlert.style.display = 'block';
-                    paymentAlert.innerHTML = `
-                        לפי החישוב, נראה כי חסר לך עוד ${missingAmount.toFixed(2)}₪.
-                        <br>
-                        <a href="https://www.matara.pro/nedarimplus/online/?mosad=7000952&amount=${missingAmount.toFixed(2)}" 
-                           target="_blank">
-                            לחץ כאן להשלמת התשלום
-                        </a>
-                    `;
-                    paymentAlert.scrollIntoView({behavior: 'smooth'});
-                    return;
+                if (monthlyPaymentGroup.style.display !== 'none') {
+                    if (monthlyPayment < requiredPayment) {
+                        const missingAmount = requiredPayment - monthlyPayment;
+                        paymentAlert.style.display = 'block';
+                        paymentAlert.innerHTML = `
+                            לפי החישוב, נראה כי חסר לך עוד ${missingAmount.toFixed(2)}₪.
+                            <br>
+                            <a href="https://www.matara.pro/nedarimplus/online/?mosad=7000952&amount=${missingAmount.toFixed(2)}" 
+                               target="_blank">
+                                לחץ כאן להשלמת התשלום
+                            </a>
+                        `;
+                        paymentAlert.scrollIntoView({behavior: 'smooth'});
+                        return;
+                    }
                 } else {
-                    paymentAlert.style.display = 'none';
+                    if (totalAmount < requiredPayment) {
+                        const missingAmount = requiredPayment - totalAmount;
+                        paymentAlert.style.display = 'block';
+                        paymentAlert.innerHTML = `
+                            לפי החישוב, נראה כי חסר לך עוד ${missingAmount.toFixed(2)}₪.
+                            <br>
+                            <a href="https://www.matara.pro/nedarimplus/online/?mosad=7000952&amount=${missingAmount.toFixed(2)}" 
+                               target="_blank">
+                                לחץ כאן להשלמת התשלום
+                            </a>
+                        `;
+                        paymentAlert.scrollIntoView({behavior: 'smooth'});
+                        return;
+                    }
                 }
 
-                // המשך שליחה
-                const formData = new FormData(form);
-                const data = Object.fromEntries(formData);
-                data.timestamp = new Date().toLocaleString('he-IL');
-                
-                // הוספת הסכום הכולל לנתונים
-                data.totalAmount = totalAmountSpan.textContent;
-                
                 try {
+                    const formData = new FormData(form);
+                    const data = Object.fromEntries(formData);
+                    data.timestamp = new Date().toLocaleString('he-IL');
+                    data.totalAmount = totalAmountSpan.textContent;
+
                     await fetch(GOOGLE_SCRIPT_URL, {
                         method: 'POST',
                         mode: 'no-cors',
