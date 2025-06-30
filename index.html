@@ -358,31 +358,31 @@
                         </div>
                     </div>
                 </div>
-                <!-- שדות נסתרים עבור כל האפשרויות -->
-                <input type="hidden" name="coordinatorName" value="">
-                <input type="hidden" name="coordinatorPhone" value="">
-                <input type="hidden" name="hasDistributors" value="">
-                <input type="hidden" name="distributorsPhones" value="">
-                <input type="hidden" name="coordinatorDonation" value="">
-                <input type="hidden" name="coordinatorAmount" value="">
-                <input type="hidden" name="distributorsDonation" value="">
-                <input type="hidden" name="distributorsAmount" value="">
+                <!-- שדות נסתרים שמתעדכנים דינמית -->
+                <input type="hidden" id="hiddenCoordinatorName" name="coordinatorName" value="">
+                <input type="hidden" id="hiddenCoordinatorPhone" name="coordinatorPhone" value="">
+                <input type="hidden" id="hiddenHasDistributors" name="hasDistributors" value="">
+                <input type="hidden" id="hiddenDistributorsPhones" name="distributorsPhones" value="">
+                <input type="hidden" id="hiddenCoordinatorDonation" name="coordinatorDonation" value="">
+                <input type="hidden" id="hiddenCoordinatorAmount" name="coordinatorAmount" value="">
+                <input type="hidden" id="hiddenDistributorsDonation" name="distributorsDonation" value="">
+                <input type="hidden" id="hiddenDistributorsAmount" name="distributorsAmount" value="">
                 <div id="distributorFields" style="display:none;">
                     <div class="split-group">
                         <div class="form-group">
                             <label>שם הרכז:</label>
-                            <input type="text" name="coordinatorName">
+                            <input type="text" id="coordinatorName" onchange="document.getElementById('hiddenCoordinatorName').value = this.value">
                         </div>
                         <div class="form-group">
                             <label>טלפון הרכז:</label>
-                            <input type="tel" name="coordinatorPhone">
+                            <input type="tel" id="coordinatorPhone" onchange="document.getElementById('hiddenCoordinatorPhone').value = this.value">
                         </div>
                     </div>
                 </div>
                 <div id="coordinatorFields" style="display:none;">
                     <div class="form-group">
                         <label>האם יש תחתיך מפיצים? <span style="font-size:0.9em">(במידה שמדובר בטלפונים כשרים)</span></label>
-                        <select name="hasDistributors" id="hasDistributors">
+                        <select id="hasDistributors" onchange="document.getElementById('hiddenHasDistributors').value = this.value">
                             <option value="">בחר</option>
                             <option value="כן">כן</option>
                             <option value="לא">לא</option>
@@ -390,11 +390,11 @@
                     </div>
                     <div class="form-group" id="distributorsPhonesGroup" style="display:none;">
                         <label>מספרי טלפונים של נציגים:</label>
-                        <textarea name="distributorsPhones"></textarea>
+                        <textarea id="distributorsPhones" onchange="document.getElementById('hiddenDistributorsPhones').value = this.value"></textarea>
                     </div>
                     <div class="form-group">
                         <label>האם אתה תורם כל חודש?</label>
-                        <select name="coordinatorDonation" id="coordinatorDonation">
+                        <select id="coordinatorDonation" onchange="document.getElementById('hiddenCoordinatorDonation').value = this.value">
                             <option value="">בחר</option>
                             <option value="כן">כן</option>
                             <option value="לא">לא</option>
@@ -402,11 +402,11 @@
                     </div>
                     <div class="form-group" id="coordinatorAmountGroup" style="display:none;">
                         <label>כמה אתה תורם בכל חודש? (₪)</label>
-                        <input type="number" name="coordinatorAmount" id="coordinatorAmount" min="0">
+                        <input type="number" id="coordinatorAmount" min="0" onchange="document.getElementById('hiddenCoordinatorAmount').value = this.value">
                     </div>
                     <div class="form-group">
                         <label>האם הנציגים תורמים כל חודש?</label>
-                        <select name="distributorsDonation" id="distributorsDonation">
+                        <select id="distributorsDonation" onchange="document.getElementById('hiddenDistributorsDonation').value = this.value">
                             <option value="">בחר</option>
                             <option value="כן">כן</option>
                             <option value="לא">לא</option>
@@ -414,7 +414,7 @@
                     </div>
                     <div class="form-group" id="distributorsAmountGroup" style="display:none;">
                         <label>כמה הנציגים תורמים בכל חודש? (₪)</label>
-                        <input type="number" name="distributorsAmount" id="distributorsAmount" min="0">
+                        <input type="number" id="distributorsAmount" min="0" onchange="document.getElementById('hiddenDistributorsAmount').value = this.value">
                     </div>
                 </div>
                 <div class="split-group">
@@ -530,12 +530,14 @@
             if (hasDistributors) {
                 hasDistributors.addEventListener('change', function() {
                     distributorsPhonesGroup.style.display = this.value === 'כן' ? 'block' : 'none';
+                    document.getElementById('hiddenHasDistributors').value = this.value;
                 });
             }
 
             if (coordinatorDonation) {
                 coordinatorDonation.addEventListener('change', function() {
                     coordinatorAmountGroup.style.display = this.value === 'כן' ? 'block' : 'none';
+                    document.getElementById('hiddenCoordinatorDonation').value = this.value;
                     calculateTotalAmount();
                 });
             }
@@ -543,17 +545,35 @@
             if (distributorsDonation) {
                 distributorsDonation.addEventListener('change', function() {
                     distributorsAmountGroup.style.display = this.value === 'כן' ? 'block' : 'none';
+                    document.getElementById('hiddenDistributorsDonation').value = this.value;
                     calculateTotalAmount();
                 });
             }
 
             if (coordinatorAmountInput) {
-                coordinatorAmountInput.addEventListener('input', calculateTotalAmount);
+                coordinatorAmountInput.addEventListener('input', function() {
+                    document.getElementById('hiddenCoordinatorAmount').value = this.value;
+                    calculateTotalAmount();
+                });
             }
 
             if (distributorsAmountInput) {
-                distributorsAmountInput.addEventListener('input', calculateTotalAmount);
+                distributorsAmountInput.addEventListener('input', function() {
+                    document.getElementById('hiddenDistributorsAmount').value = this.value;
+                    calculateTotalAmount();
+                });
             }
+
+            // עדכון דינמי של שדות נסתרים
+            document.getElementById('coordinatorName').addEventListener('input', function() {
+                document.getElementById('hiddenCoordinatorName').value = this.value;
+            });
+            document.getElementById('coordinatorPhone').addEventListener('input', function() {
+                document.getElementById('hiddenCoordinatorPhone').value = this.value;
+            });
+            document.getElementById('distributorsPhones').addEventListener('input', function() {
+                document.getElementById('hiddenDistributorsPhones').value = this.value;
+            });
 
             form.addEventListener('submit', async function(e) {
                 e.preventDefault();
