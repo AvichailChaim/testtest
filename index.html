@@ -595,6 +595,10 @@
                     data.timestamp = new Date().toLocaleString('he-IL');
                     data.totalAmount = totalAmountSpan.textContent;
 
+                    // כאן מוסיפים:
+                    if (data.role === "מפיץ") {
+                        data.coordinatorAmount = monthlyPaymentInput.value || '';
+                    }
 
                     await fetch(GOOGLE_SCRIPT_URL, {
                         method: 'POST',
